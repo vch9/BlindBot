@@ -1,0 +1,8 @@
+# Node modules
+node_modules/
+
+# All dot files
+.*
+
+# Secret token
+token.js
