@@ -2,16 +2,10 @@ const Discord = require('discord.js');
 const Common = require('./common.js');
 
 function exec (client, msg) {
-    let cmd = msg.content.substr(1);
-    cmd.trim();
-    let cmds = cmd.split(' ');
-    switch (cmds[0]) {
-        case 'help':
-            Common.error_msg(msg);
-            break;
-        default:
-            msg.reply('Try `?help` for help');
-            break;
+    if (msg.content.startsWith("?help")) {
+        Common.error_msg(msg);
+    } else {
+        msg.reply('Try `?help` for help');
     }
 }
 
