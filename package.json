@@ -1,0 +1,28 @@
+{
+  "name": "blindbot",
+  "version": "0.0.1",
+  "description": "Discord bot to play blind test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vch9/BlindBot.git"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "blindtest",
+    "music"
+  ],
+  "author": "Valentin Chaboche (vch9)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vch9/BlindBot/issues"
+  },
+  "homepage": "https://github.com/vch9/BlindBot#readme",
+  "dependencies": {
+    "discord.js": "^12.2.0"
+  }
+}
