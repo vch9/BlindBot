@@ -1,7 +1,5 @@
-function error_msg (msg) {
-    const not_impl = "NOT_IMPLEMENTED";
-    msg.reply(not_impl);
-}
+const Discord = require('discord.js');
+const Common = require('./common.js');
 
 function exec (client, msg) {
     let cmd = msg.content.substr(1);
@@ -9,7 +7,7 @@ function exec (client, msg) {
     let cmds = cmd.split(' ');
     switch (cmds[0]) {
         case 'help':
-            error_msg(msg);
+            Common.error_msg(msg);
             break;
         default:
             msg.reply('Try `?help` for help');
