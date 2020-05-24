@@ -7,7 +7,7 @@ exports.listen = function (self, client) {
     client.on('message', msg => {
         if (msg.author.username != self &&
             msg.channel.name === "dev" &&
-            msg.content[0] === ":") {
+            msg.content[0] === "?") {
             error_msg(msg);
         }
     });
