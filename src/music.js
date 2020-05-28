@@ -19,6 +19,7 @@ function playMusic(id) {
         play(id);
     });
     dispatcher.on('error', err => console.log(err));
+    dispatcher.setVolumeLogarithmic(servQueue.volume / 5);
     servQueue.textChannel.send(`Start playing: ${song.title}`);
 }
 
@@ -43,6 +44,7 @@ exports.play = async function (msg) {
         let newQueue = {
             active: true,
             songs: [],
+            volume: 5,
             voiceChannel: voiceChannel,
             textChannel: textChannel,
             conn: null
@@ -63,5 +65,18 @@ exports.play = async function (msg) {
     } else {
         servQueue.songs.push(song);
         msg.channel.send(`${song.title} has been added to the queue.`);
+    }
+}
+
+exports.volume = async function (msg) {
+    servQueue = queue.get(msg.guild.id);
+    if(!servQueue) {
+        msg.channel.send('You can\'t set volume if i\'m not in a voice channel!');
+    }
+    let args = msg.content.substr(8);
+    let vol = parseInt(args);
+
+    if (vol) {
+        servQueue.volume = vol;
     }
 }
