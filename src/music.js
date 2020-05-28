@@ -27,12 +27,21 @@ exports.play = async function (msg) {
     const voiceChannel = msg.member.voice.channel;
     const textChannel = msg.channel;
 
-    const args = msg.content.substr(6);
-    const songInfo = await ytdl.getInfo(args);
-    const song = {
-        title: songInfo.title,
-        url: songInfo.video_url
+
+    let song = {
+        title: '',
+        url: ''
     };
+    const args = msg.content.substr(6);
+    try {
+        const songInfo = await ytdl.getInfo(args);
+
+        song.title =songInfo.title,
+        song.url = songInfo.video_url
+    } catch (err) {
+        msg.reply(`${args} doesn't exist`);
+        return;
+    }
 
     if (!voiceChannel) {
         msg.reply("You need to be in a voice channel");
