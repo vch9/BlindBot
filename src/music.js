@@ -1,7 +1,6 @@
 const Common = require('./common.js');
 
 const queue = new Map();
-const servQueue = false;
 
 async function connect (queue, msg, voiceChannel) {
     try {
@@ -23,6 +22,7 @@ exports.play = async function (msg) {
         return;
     }
 
+    servQueue = queue.get(msg.guild.id);
     if (!servQueue) {
         let newQueue = {
             active: true,
@@ -33,6 +33,6 @@ exports.play = async function (msg) {
         queue.set(msg.guild.id, newQueue);
         connect(queue, msg, voiceChannel);
     } else {
-        servQueue.song.push(args);
+        servQueue.songs.push(args);
     }
 }
