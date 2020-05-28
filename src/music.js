@@ -3,6 +3,25 @@ const ytdl = require('ytdl-core');
 
 const queue = new Map();
 
+function playMusic(id) {
+    const servQueue = queue.get(id);
+    const song = servQueue.songs[0];
+
+    if (!song) {
+        servQueue.voiceChannel.leave();
+        queue.delete(id);
+        return;
+    }
+
+    const dispatcher = servQueue.conn.play(ytdl(song.url));
+    dispatcher.on('finish', () => {
+        servQueue.songs.shift();
+        play(id);
+    });
+    dispatcher.on('error', err => console.log(err));
+    servQueue.textChannel.send(`Start playing: ${song.title}`);
+}
+
 exports.play = async function (msg) {
     const voiceChannel = msg.member.voice.channel;
     const textChannel = msg.channel;
@@ -38,7 +57,9 @@ exports.play = async function (msg) {
             msg.reply('I could not join your voice channel!');
         }
 
-        newQueue.songs.push(args);
+        newQueue.songs.push(song);
+
+        playMusic(msg.guild.id);
     } else {
         servQueue.songs.push(song);
         msg.channel.send(`${song.title} has been added to the queue.`);
