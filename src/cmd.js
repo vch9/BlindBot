@@ -13,10 +13,9 @@ function exec (msg) {
 }
 
 exports.listen = function (self, client) {
-    client.on('message', msg => {
-        if (msg.author.username != self &&
-            msg.channel.name === "dev" &&
-            msg.content[0] === "?") {
+    client.on('message', async msg => {
+        if (msg.author.bot) return;
+        if (msg.channel.name === "dev") {
             exec(msg);
         }
     });
