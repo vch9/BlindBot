@@ -7,7 +7,7 @@ function exec (msg) {
         Common.error_msg(msg);
     } else if (msg.content.startsWith("?play")) {
         Music.play(msg);
-    } else {
+    } else if (msg.content.startsWith("?")) {
         msg.reply('Try `?help` for help');
     }
 }
