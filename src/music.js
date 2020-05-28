@@ -72,6 +72,7 @@ exports.volume = async function (msg) {
     servQueue = queue.get(msg.guild.id);
     if(!servQueue) {
         msg.channel.send('You can\'t set volume if i\'m not in a voice channel!');
+        return;
     }
     let args = msg.content.substr(8);
     let vol = parseInt(args);
@@ -79,4 +80,16 @@ exports.volume = async function (msg) {
     if (vol) {
         servQueue.volume = vol;
     }
+}
+
+exports.leave = async function (msg) {
+    const voiceChannel = msg.member.voice.channel;
+
+    if (!voiceChannel) {
+        msg.channel.send('You need to be in my voice channel to make me leave!');
+        return;
+    }
+
+    voiceChannel.leave();
+    queue.delete(msg.guild.id);
 }

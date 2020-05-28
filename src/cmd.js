@@ -9,6 +9,8 @@ function exec (msg) {
         Music.play(msg);
     } else if (msg.content.startsWith("?volume")) {
         Music.volume(msg);
+    } else if (msg.content.startsWith("?leave")) {
+        Music.leave(msg);
     } else if (msg.content.startsWith("?")) {
         msg.reply('Try `?help` for help');
     }
