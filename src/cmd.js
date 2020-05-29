@@ -6,6 +6,10 @@ const Blindtest = require('./blindtest.js');
 function exec (msg) {
     // Blind test dedicated command
     if (Blindtest.inGame(msg)) {
+        if (msg.content.startsWith("?stop")) {
+            Blindtest.stop(msg);
+        }
+
         return;
     }
 

@@ -19,3 +19,8 @@ exports.inGame = function (msg) {
     const game = games.get(msg.guild.id);
     return game;
 }
+
+exports.stop = function (msg) {
+    games.delete(msg.guild.id);
+    msg.channel.send('Blindtest has been stopped.');
+}
