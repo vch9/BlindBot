@@ -3,7 +3,7 @@ const ytdl = require('ytdl-core');
 
 const queue = new Map();
 
-function playMusic(id) {
+function playQueue(id) {
     const servQueue = queue.get(id);
     const song = servQueue.songs[0];
 
@@ -13,14 +13,14 @@ function playMusic(id) {
         return;
     }
 
-    const dispatcher = servQueue.conn.play(ytdl(song.url));
-    dispatcher.on('finish', () => {
+    function playNext() {
         servQueue.songs.shift();
-        playMusic(id);
-    });
-    dispatcher.on('error', err => console.log(err));
-    dispatcher.setVolumeLogarithmic(servQueue.volume / 5);
+        playQueue(id);
+    }
+
+    Common.playMusic(servQueue.conn, servQueue.volume, song.url, playNext);
     servQueue.textChannel.send(`Start playing: ${song.title}`);
+
 }
 
 exports.play = async function (msg) {
@@ -70,7 +70,7 @@ exports.play = async function (msg) {
 
         newQueue.songs.push(song);
 
-        playMusic(msg.guild.id);
+        playQueue(msg.guild.id);
     } else {
         servQueue.songs.push(song);
         msg.channel.send(`${song.title} has been added to the queue.`);

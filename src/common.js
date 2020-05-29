@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const ytdl = require('ytdl-core');
 
 exports.error_msg = function (msg) {
     const not_impl = "NOT_IMPLEMENTED";
@@ -11,4 +12,13 @@ exports.checkVoiceChannel = function (msg) {
         return false;
     }
     return true;
+}
+
+exports.playMusic = function (connection, volume, url, on_finish) {
+    const dispatcher = connection.play(ytdl(url));
+    dispatcher.on('error', err => console.log(err));
+    dispatcher.setVolumeLogarithmic(volume / 5);
+    dispatcher.on('finish', () => {
+        on_finish();
+    });
 }
