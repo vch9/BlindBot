@@ -4,6 +4,11 @@ const Music = require('./music.js');
 const Blindtest = require('./blindtest.js');
 
 function exec (msg) {
+    // Blind test dedicated command
+    if (Blindtest.inGame(msg)) {
+        return;
+    }
+
     if (msg.content.startsWith("?help")) {
         Common.error_msg(msg);
     } else if (msg.content.startsWith("?play")) {
