@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const Common = require('./common.js');
 const Music = require('./music.js');
+const Blindtest = require('./blindtest.js');
 
 function exec (msg) {
     if (msg.content.startsWith("?help")) {
@@ -15,6 +16,8 @@ function exec (msg) {
         Music.skip(msg);
     } else if (msg.content.startsWith("?stop") || msg.content.startsWith("?skip all")) {
         Music.stop(msg);
+    } else if (msg.content.startsWith("?blindtest")) {
+        Blindtest.start(msg);
     } else if (msg.content.startsWith("?")) {
         msg.reply('Try `?help` for help');
     }
