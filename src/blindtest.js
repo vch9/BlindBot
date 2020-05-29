@@ -20,7 +20,7 @@ function displayThemes (channel) {
     const msg = new Discord.MessageEmbed()
         .setColor('#0099ff')
         .setTitle('Starting the blind test party!')
-        .setDescription('Pick your theme:\n' + themes_str + '\nuse ?pick [theme]');
+        .setDescription('Pick your theme and number of songs:\n' + themes_str + '\nuse ?pick [theme] [number]');
     
     channel.send(msg);
 }
@@ -36,16 +36,29 @@ exports.pick = function (msg) {
         return;
     }
 
-    let args = msg.content.substr(6);
+    let args = msg.content.substr(6).split(' ');
+    if (args.length != 2) {
+        msg.channel.send(`Invalid number of arguments:\n \`?pick [theme] [number]\``);
+        return;
+    }
 
     let themes = getThemes();
-    let theme = args + '.js';
-    if (!themes.includes(theme)) {
-        msg.channel.send(`${args} is not a valid theme!`);
+    let theme = args[0];
+    if (!themes.includes(theme + '.js')) {
+        msg.channel.send(`${theme} is not a valid theme!`);
+        return;
+    }
+
+    let number = parseInt(args[1]);
+    if (!number) {
+        msg.channel.send(`${args[1]} is not a valid number!`);
         return;
     }
 
     game.theme = theme;
+    game.max = number;
+
+    msg.channel.send(`Theme selected: ${theme}, \nNumber of songs: ${number}`);
 }
 
 exports.start = function (msg) {
@@ -55,7 +68,8 @@ exports.start = function (msg) {
 
     let game = {
         active: true,
-        theme: null
+        theme: null,
+        max: -1
     };
 
     games.set(msg.guild.id, game);
