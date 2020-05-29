@@ -105,7 +105,7 @@ exports.leave = async function (msg) {
 
 exports.skip = async function (msg) {
     if (!msg.member.voice.channel) {
-        msg.reply('You have to be in a voice channel to skip music');
+        msg.reply('You have to be in a voice channel to skip the music');
         return;
     }
     let servQueue = queue.get(msg.guild.id);
@@ -114,4 +114,18 @@ exports.skip = async function (msg) {
         return;
     }
     servQueue.conn.dispatcher.end();
+}
+
+exports.stop = async function (msg) {
+    if (!msg.member.voice.channel) {
+        msg.reply('You have to be in a voice channel to stop the music');
+        return;
+    }
+    let servQueue = queue.get(msg.guild.id);
+    if (servQueue) {
+        servQueue.songs = [];
+        servQueue.conn.dispatcher.end();
+    }
+
+    msg.channel.send('Music stopped.');
 }

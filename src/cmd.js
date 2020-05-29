@@ -13,6 +13,8 @@ function exec (msg) {
         Music.leave(msg);
     } else if (msg.content.startsWith("?skip")) {
         Music.skip(msg);
+    } else if (msg.content.startsWith("?stop") || msg.content.startsWith("?skip all")) {
+        Music.stop(msg);
     } else if (msg.content.startsWith("?")) {
         msg.reply('Try `?help` for help');
     }
