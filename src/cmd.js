@@ -11,6 +11,8 @@ function exec (msg) {
         Music.volume(msg);
     } else if (msg.content.startsWith("?leave")) {
         Music.leave(msg);
+    } else if (msg.content.startsWith("?skip")) {
+        Music.skip(msg);
     } else if (msg.content.startsWith("?")) {
         msg.reply('Try `?help` for help');
     }

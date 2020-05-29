@@ -16,7 +16,7 @@ function playMusic(id) {
     const dispatcher = servQueue.conn.play(ytdl(song.url));
     dispatcher.on('finish', () => {
         servQueue.songs.shift();
-        play(id);
+        playMusic(id);
     });
     dispatcher.on('error', err => console.log(err));
     dispatcher.setVolumeLogarithmic(servQueue.volume / 5);
@@ -101,4 +101,17 @@ exports.leave = async function (msg) {
 
     voiceChannel.leave();
     queue.delete(msg.guild.id);
+}
+
+exports.skip = async function (msg) {
+    if (!msg.member.voice.channel) {
+        msg.reply('You have to be in a voice channel to skip music');
+        return;
+    }
+    let servQueue = queue.get(msg.guild.id);
+    if (!servQueue) {
+        msg.reply('There is no songs in the queue');
+        return;
+    }
+    servQueue.conn.dispatcher.end();
 }
