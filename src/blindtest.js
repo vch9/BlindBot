@@ -25,6 +25,29 @@ function displayThemes (channel) {
     channel.send(msg);
 }
 
+exports.pick = function (msg) {
+    if (!common.checkVoiceChannel(msg)) {
+        return;
+    }
+
+    let game = games.get(msg.guild.id);
+    if (game.theme) {
+        msg.channel.send('The theme is already picked!');
+        return;
+    }
+
+    let args = msg.content.substr(6);
+
+    let themes = getThemes();
+    let theme = args + '.js';
+    if (!themes.includes(theme)) {
+        msg.channel.send(`${args} is not a valid theme!`);
+        return;
+    }
+
+    game.theme = theme;
+}
+
 exports.start = function (msg) {
     if (!common.checkVoiceChannel(msg)) {
         return;

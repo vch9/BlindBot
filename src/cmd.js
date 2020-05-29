@@ -8,6 +8,8 @@ function exec (msg) {
     if (Blindtest.inGame(msg)) {
         if (msg.content.startsWith("?stop")) {
             Blindtest.stop(msg);
+        } else if (msg.content.startsWith("?pick")) {
+            Blindtest.pick(msg);
         }
 
         return;
