@@ -86,7 +86,13 @@ function fetchPlayers (voiceChannel) {
     let players = [];
 
     voiceChannel.members.forEach(member => {
-        players.push([member.nickname, 0]);
+        if (!member.user.bot) {
+            if (member.nickname) {
+                players.push([member.nickname, 0]);
+            } else {
+                players.push([member.user.username, 0]);
+            }
+        }
     });
 
     return players;
@@ -157,11 +163,18 @@ exports.stop = function (msg) {
 }
 
 function updateScores (game, player) {
-    const index = game.players.indexOf(player);
+    let name = '';
+    if (player.nickname) {
+        name = player.nickname;
+    } else {
+        name = player.user.username;
+    }
+
+    const index = game.players.indexOf(name);
 
     let found = false;
     game.players.forEach(pl => {
-        if (pl[0] === player) {
+        if (pl[0] === name) {
             pl[1] += 1;
             found = true;
             return
@@ -169,7 +182,7 @@ function updateScores (game, player) {
     });
 
     if (!found) {
-        game.players.push([player, 1]);
+        game.players.push([name, 1]);
     }
 }
 
@@ -182,7 +195,7 @@ exports.answer = async function (msg) {
             let player_answer = msg.content.toUpperCase();
 
             if (answer === player_answer) {
-                updateScores(game, msg.member.nickname);
+                updateScores(game, msg.member);
                 displayScores(game);
             }
         }
