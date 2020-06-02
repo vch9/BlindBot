@@ -11,7 +11,7 @@ function exec (msg) {
         } else if (msg.content.startsWith("?pick")) {
             Blindtest.pick(msg);
         }
-
+        Blindtest.answer(msg);
         return;
     }
 

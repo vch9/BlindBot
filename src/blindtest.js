@@ -15,9 +15,18 @@ function pickFromTheme (theme, done) {
     return songs[i];
 }
 
+function showAnswer (channel, answer) {
+    channel.send(`The answer was ${answer}`);
+}
+
 async function playSong (game) {
     let song = pickFromTheme(game.theme, game.done);
-    console.log(song);
+    game.current_song = song;
+
+    common.playMusic (game.conn, 5, song[1], () => {
+        showAnswer(game.textChannel, song[0]);
+    });
+
 }
 
 async function startPlaying (game) {
@@ -69,6 +78,7 @@ exports.pick = function (msg) {
 
     msg.channel.send(`Theme selected: ${theme_play}, \nNumber of songs: ${number}`);
 
+    game.active = true;
     startPlaying(game);
 }
 
@@ -80,11 +90,12 @@ exports.start = function (msg) {
     let game = {
         textChannel: msg.channel,
         voiceChannel: msg.member.voice.channel,
-        active: true,
+        active: false,
         theme: null,
         max: -1,
         conn: null,
-        done: []
+        done: [],
+        current_song: null
     };
 
     games.set(msg.guild.id, game);
@@ -102,9 +113,18 @@ exports.stop = function (msg) {
     msg.channel.send('Blindtest has been stopped.');
 }
 
-exports.answer = function (msg) {
+exports.answer = async function (msg) {
     let game = games.get(msg.guild.id);
-    if (game && msg.channel === game.textChannel) {
-        // TODO: Check answers.
+    if (game && game.active && msg.channel === game.textChannel) {
+        const song = game.current_song;
+        if (song) {
+            console.log(song);
+            let answer = song[0].toUpperCase();
+            let player_answer = msg.content.toUpperCase();
+
+            if (answer === player_answer) {
+                // TODO: update scores
+            }
+        }
     }
 }
