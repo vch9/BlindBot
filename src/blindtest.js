@@ -82,6 +82,38 @@ exports.pick = function (msg) {
     startPlaying(game);
 }
 
+function fetchPlayers (voiceChannel) {
+    let players = [];
+
+    voiceChannel.members.forEach(member => {
+        players.push([member.nickname, 0]);
+    });
+
+    return players;
+}
+
+function getStrPlayers (game) {
+    let players_str = 'Players Score:\n';
+    game.players.forEach(player => {
+        players_str += `* ${player[0]}: ${player[1]}`;
+    });
+    return players_str;
+}
+
+function displayGame (game, channel) {
+    let themes_str = Theme.getStrThemes(channel);
+    let players_str = getStrPlayers(game);
+
+
+    const description = themes_str + '\n\n\n' + players_str;
+    const msg = new Discord.MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle('Starting the blind test party!')
+        .setDescription(description)
+
+    channel.send(msg);
+}
+
 exports.start = function (msg) {
     if (!common.checkVoiceChannel(msg)) {
         return;
@@ -95,12 +127,13 @@ exports.start = function (msg) {
         max: -1,
         conn: null,
         done: [],
-        current_song: null
+        current_song: null,
+        players: fetchPlayers(msg.member.voice.channel)
     };
 
     games.set(msg.guild.id, game);
 
-    Theme.displayThemes(msg.channel);
+    displayGame(game, msg.channel);
 }
 
 exports.inGame = function (msg) {
@@ -118,7 +151,6 @@ exports.answer = async function (msg) {
     if (game && game.active && msg.channel === game.textChannel) {
         const song = game.current_song;
         if (song) {
-            console.log(song);
             let answer = song[0].toUpperCase();
             let player_answer = msg.content.toUpperCase();
 
