@@ -95,9 +95,19 @@ function fetchPlayers (voiceChannel) {
 function getStrPlayers (game) {
     let players_str = 'Players Score:\n';
     game.players.forEach(player => {
-        players_str += `* ${player[0]}: ${player[1]}`;
+        players_str += `* ${player[0]}: ${player[1]}\n`;
     });
     return players_str;
+}
+
+function displayScores (game) {
+    showAnswer(game.textChannel, game.current_song[0]);
+
+    const msg = new Discord.MessageEmbed()
+        .setColor('#0099ff')
+        .setDescription(getStrPlayers(game))
+
+    game.textChannel.send(msg);
 }
 
 function displayGame (game, channel) {
@@ -146,6 +156,23 @@ exports.stop = function (msg) {
     msg.channel.send('Blindtest has been stopped.');
 }
 
+function updateScores (game, player) {
+    const index = game.players.indexOf(player);
+
+    let found = false;
+    game.players.forEach(pl => {
+        if (pl[0] === player) {
+            pl[1] += 1;
+            found = true;
+            return
+        }
+    });
+
+    if (!found) {
+        game.players.push([player, 1]);
+    }
+}
+
 exports.answer = async function (msg) {
     let game = games.get(msg.guild.id);
     if (game && game.active && msg.channel === game.textChannel) {
@@ -155,7 +182,8 @@ exports.answer = async function (msg) {
             let player_answer = msg.content.toUpperCase();
 
             if (answer === player_answer) {
-                // TODO: update scores
+                updateScores(game, msg.member.nickname);
+                displayScores(game);
             }
         }
     }
