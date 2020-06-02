@@ -37,8 +37,6 @@ function exec (msg) {
 exports.listen = function (self, client) {
     client.on('message', async msg => {
         if (msg.author.bot) return;
-        if (msg.channel.name === "dev") {
-            exec(msg);
-        }
+        exec(msg);
     });
 }
