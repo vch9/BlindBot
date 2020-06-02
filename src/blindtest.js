@@ -25,24 +25,34 @@ async function playSong (game) {
 
     common.playMusic (game.conn, 5, song[1], () => {
         showAnswer(game.textChannel, song[0]);
+        nextSound(game);
     });
 
 }
 
-async function startPlaying (game) {
-    try {
-        const conn = await game.voiceChannel.join();
-        game.conn = conn;
-    } catch  (err) {
-        console.log(err);
+async function nextSound (game) {
+    if (game.nb >= game.max) {
+        const scores = getStrPlayers(game);
+        const description = '\n\n' + scores;
+
+        const msg = new Discord.MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle('The game has ended!')
+            .setDescription(description)
+
+        game.textChannel.send(msg);
         return;
     }
-
-    let count = 0;
-    while (count < game.max) {
-        playSong(game);
-        count++;
+    if (!game.conn) {
+        try {
+            const conn = await game.voiceChannel.join();
+            game.conn = conn;
+        } catch  (err) {
+            console.log(err);
+            return;
+        }
     }
+    playSong(game);
 }
 
 exports.pick = function (msg) {
@@ -79,7 +89,7 @@ exports.pick = function (msg) {
     msg.channel.send(`Theme selected: ${theme_play}, \nNumber of songs: ${number}`);
 
     game.active = true;
-    startPlaying(game);
+    nextSound(game);
 }
 
 function fetchPlayers (voiceChannel) {
@@ -107,8 +117,6 @@ function getStrPlayers (game) {
 }
 
 function displayScores (game) {
-    showAnswer(game.textChannel, game.current_song[0]);
-
     const msg = new Discord.MessageEmbed()
         .setColor('#0099ff')
         .setDescription(getStrPlayers(game))
@@ -141,6 +149,7 @@ exports.start = function (msg) {
         active: false,
         theme: null,
         max: -1,
+        nb: 0,
         conn: null,
         done: [],
         current_song: null,
@@ -195,8 +204,10 @@ exports.answer = async function (msg) {
             let player_answer = msg.content.toUpperCase();
 
             if (answer === player_answer) {
+                game.nb += 1;
                 updateScores(game, msg.member);
                 displayScores(game);
+                game.conn.dispatcher.end();
             }
         }
     }
