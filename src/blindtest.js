@@ -67,6 +67,7 @@ exports.start = function (msg) {
     }
 
     let game = {
+        textChannel: msg.channel,
         active: true,
         theme: null,
         max: -1
@@ -85,4 +86,11 @@ exports.inGame = function (msg) {
 exports.stop = function (msg) {
     games.delete(msg.guild.id);
     msg.channel.send('Blindtest has been stopped.');
+}
+
+exports.answer = function (msg) {
+    let game = games.get(msg.guild.id);
+    if (game && msg.channel === game.textChannel) {
+        // TODO: Check answers.
+    }
 }
