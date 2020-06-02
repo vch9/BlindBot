@@ -86,7 +86,12 @@ exports.pick = function (msg) {
     game.theme = theme_play;
     game.max = number;
 
-    msg.channel.send(`Theme selected: ${theme_play}, \nNumber of songs: ${number}`);
+    const max_songs = Theme.songsInTheme(theme_play);
+    if (max_songs < number) {
+        game.max = max_songs;
+    }
+
+    msg.channel.send(`Theme selected: ${game.theme}, \nNumber of songs: ${game.max}`);
 
     game.active = true;
     nextSound(game);

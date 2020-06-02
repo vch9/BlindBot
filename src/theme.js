@@ -3,7 +3,7 @@ const themes_path = './musics/';
 const Discord = require('discord.js');
 const fs = require('fs');
 
-exports.getSongsFromTheme = function (theme) {
+function getSongsFromTheme (theme) {
     let file = '../musics/' + theme;
     switch(theme) {
         case 'movies':
@@ -12,6 +12,8 @@ exports.getSongsFromTheme = function (theme) {
     }
     return null;
 }
+
+exports.getSongsFromTheme = getSongsFromTheme;
 
 function getThemes () {
     return fs.readdirSync(themes_path);
