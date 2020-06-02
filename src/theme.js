@@ -21,7 +21,7 @@ exports.songsInTheme = function (theme) {
     return getSongsFromTheme(theme).length;
 }
 
-exports.getStrThemes = function (channel) {
+exports.getStrThemes = function () {
     let themes = getThemes();
     let themes_str = 'Pick your theme and number of songs:\n';
     themes.forEach(theme => {

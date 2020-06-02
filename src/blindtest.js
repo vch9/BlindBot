@@ -125,7 +125,7 @@ function displayScores (game) {
 }
 
 function displayGame (game, channel) {
-    let themes_str = Theme.getStrThemes(channel);
+    let themes_str = Theme.getStrThemes();
     let players_str = getStrPlayers(game);
 
 
