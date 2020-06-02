@@ -9,8 +9,9 @@ function pickFromTheme (theme, done) {
 
     let i = Math.floor(Math.random() * Math.floor(songs.length));
     while (done.includes(i)) {
-       let i = Math.floor(Math.random() * Math.floor(songs.length));
+       i = Math.floor(Math.random() * Math.floor(songs.length));
     }
+    done.push(i);
 
     return songs[i];
 }
@@ -215,6 +216,7 @@ exports.answer = async function (msg) {
             let player_answer = msg.content.toUpperCase();
 
             if (answer === player_answer) {
+                game.song = null;
                 game.nb += 1;
                 updateScores(game, msg.member);
                 displayScores(game);
