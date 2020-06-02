@@ -25,12 +25,26 @@ function displayThemes (channel) {
     channel.send(msg);
 }
 
+function pickFromTheme (theme, done) {
+}
+
+async function playSong (game) {
+    let song = pickFromTheme(game.theme, game.done);
+}
+
 async function startPlaying (game) {
     try {
         const conn = await game.voiceChannel.join();
         game.conn = conn;
     } catch  (err) {
         console.log(err);
+        return;
+    }
+
+    let count = 0;
+    while (count < game.max) {
+        playSong(game);
+        count++;
     }
 }
 
@@ -83,7 +97,8 @@ exports.start = function (msg) {
         active: true,
         theme: null,
         max: -1,
-        conn: null
+        conn: null,
+        done: []
     };
 
     games.set(msg.guild.id, game);
