@@ -1,29 +1,8 @@
 const common = require('./common.js');
 const Discord = require('discord.js');
-const fs = require('fs');
+const theme = require('./theme.js');
 
-const themes_path = './musics/';
 const games = new Map();
-
-function getThemes() {
-    return fs.readdirSync(themes_path);
-}
-
-function displayThemes (channel) {
-    let themes = getThemes();
-    let themes_str = '';
-    themes.forEach(theme => {
-        theme = theme.substr(0, theme.length-3);
-        themes_str += `* ${theme}\n`;
-    });
-
-    const msg = new Discord.MessageEmbed()
-        .setColor('#0099ff')
-        .setTitle('Starting the blind test party!')
-        .setDescription('Pick your theme and number of songs:\n' + themes_str + '\nuse ?pick [theme] [number]');
-    
-    channel.send(msg);
-}
 
 function pickFromTheme (theme, done) {
 }
@@ -65,10 +44,8 @@ exports.pick = function (msg) {
         return;
     }
 
-    let themes = getThemes();
-    let theme = args[0];
-    if (!themes.includes(theme + '.js')) {
-        msg.channel.send(`${theme} is not a valid theme!`);
+    let theme_play = args[0];
+    if (!theme.checkTheme(msg, theme_play)) {
         return;
     }
 
@@ -78,10 +55,10 @@ exports.pick = function (msg) {
         return;
     }
 
-    game.theme = theme;
+    game.theme = theme_play;
     game.max = number;
 
-    msg.channel.send(`Theme selected: ${theme}, \nNumber of songs: ${number}`);
+    msg.channel.send(`Theme selected: ${theme_play}, \nNumber of songs: ${number}`);
 
     startPlaying(game);
 }
@@ -103,7 +80,7 @@ exports.start = function (msg) {
 
     games.set(msg.guild.id, game);
 
-    displayThemes(msg.channel);
+    theme.displayThemes(msg.channel);
 }
 
 exports.inGame = function (msg) {
