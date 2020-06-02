@@ -25,6 +25,15 @@ function displayThemes (channel) {
     channel.send(msg);
 }
 
+async function startPlaying (game) {
+    try {
+        const conn = await game.voiceChannel.join();
+        game.conn = conn;
+    } catch  (err) {
+        console.log(err);
+    }
+}
+
 exports.pick = function (msg) {
     if (!common.checkVoiceChannel(msg)) {
         return;
@@ -59,6 +68,8 @@ exports.pick = function (msg) {
     game.max = number;
 
     msg.channel.send(`Theme selected: ${theme}, \nNumber of songs: ${number}`);
+
+    startPlaying(game);
 }
 
 exports.start = function (msg) {
@@ -68,9 +79,11 @@ exports.start = function (msg) {
 
     let game = {
         textChannel: msg.channel,
+        voiceChannel: msg.member.voice.channel,
         active: true,
         theme: null,
-        max: -1
+        max: -1,
+        conn: null
     };
 
     games.set(msg.guild.id, game);
