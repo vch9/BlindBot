@@ -167,6 +167,12 @@ exports.inGame = function (msg) {
 }
 
 exports.stop = function (msg) {
+    const game = games.get(msg.guild.id);
+    if (game && game.conn) {
+        game.conn.dispatcher.end();
+        game.voiceChannel.leave();
+    }
+
     games.delete(msg.guild.id);
     msg.channel.send('Blindtest has been stopped.');
 }

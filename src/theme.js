@@ -17,6 +17,10 @@ function getThemes () {
     return fs.readdirSync(themes_path);
 }
 
+exports.songsInTheme = function (theme) {
+    return getSongsFromTheme(theme).length;
+}
+
 exports.getStrThemes = function (channel) {
     let themes = getThemes();
     let themes_str = 'Pick your theme and number of songs:\n';
