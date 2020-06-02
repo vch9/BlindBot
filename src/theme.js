@@ -3,10 +3,11 @@ const themes_path = './musics/';
 const Discord = require('discord.js');
 const fs = require('fs');
 
-function getSongsFromTheme (theme) {
+exports.getSongsFromTheme = function (theme) {
+    let file = '../musics/' + theme;
     switch(theme) {
         case 'movies':
-            const movies = require('./movies.js');
+            const movies = require(file);
             return movies.list;
     }
     return null;

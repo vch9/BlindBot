@@ -1,14 +1,23 @@
 const common = require('./common.js');
 const Discord = require('discord.js');
-const theme = require('./theme.js');
+const Theme = require('./theme.js');
 
 const games = new Map();
 
 function pickFromTheme (theme, done) {
+    let songs = Theme.getSongsFromTheme(theme);
+
+    let i = Math.floor(Math.random() * Math.floor(songs.length));
+    while (done.includes(i)) {
+       let i = Math.floor(Math.random() * Math.floor(songs.length));
+    }
+
+    return songs[i];
 }
 
 async function playSong (game) {
     let song = pickFromTheme(game.theme, game.done);
+    console.log(song);
 }
 
 async function startPlaying (game) {
@@ -45,7 +54,7 @@ exports.pick = function (msg) {
     }
 
     let theme_play = args[0];
-    if (!theme.checkTheme(msg, theme_play)) {
+    if (!Theme.checkTheme(msg, theme_play)) {
         return;
     }
 
@@ -80,7 +89,7 @@ exports.start = function (msg) {
 
     games.set(msg.guild.id, game);
 
-    theme.displayThemes(msg.channel);
+    Theme.displayThemes(msg.channel);
 }
 
 exports.inGame = function (msg) {
