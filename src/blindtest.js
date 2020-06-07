@@ -216,7 +216,7 @@ exports.answer = async function (msg) {
             let player_answer = msg.content.toUpperCase();
 
             if (answer === player_answer) {
-                game.song = null;
+                game.current_song = null;
                 game.nb += 1;
                 updateScores(game, msg.member);
                 displayScores(game);
