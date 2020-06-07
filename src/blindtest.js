@@ -43,6 +43,7 @@ async function nextSound (game) {
             .setDescription(description)
 
         game.textChannel.send(msg);
+        games.delete(game.textChannel.guild.id);
         return;
     }
     if (!game.conn) {
