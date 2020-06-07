@@ -158,6 +158,7 @@ exports.start = function (msg) {
         theme: null,
         max: -1,
         nb: 0,
+        skip: 0,
         conn: null,
         done: [],
         current_song: null,
@@ -224,6 +225,23 @@ exports.answer = async function (msg) {
                 displayScores(game);
                 game.conn.dispatcher.end();
             }
+        }
+    }
+}
+
+exports.skip = async function (msg) {
+    let game = games.get(msg.guild.id);
+    if (game && game.active && msg.channel === game.textChannel) {
+        game.skip += 1;
+
+        if (game.skip >= (game.players.length/2)) {
+            if (game.conn && game.conn.dispatcher) {
+                game.nb += 1;
+                game.conn.dispatcher.end();
+            }
+            msg.channel.send('The song has been skipped!');
+        } else {
+            msg.channel.send(`(${game.skip}/${game.players.length/2}) to skip!`);
         }
     }
 }

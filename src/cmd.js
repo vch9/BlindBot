@@ -10,6 +10,8 @@ function exec (msg) {
             Blindtest.stop(msg);
         } else if (msg.content.startsWith("?pick")) {
             Blindtest.pick(msg);
+        } else if (msg.content.startsWith("?skip")) {
+            Blindtest.skip(msg);
         }
         Blindtest.answer(msg);
         return;
