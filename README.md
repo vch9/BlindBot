@@ -36,4 +36,22 @@ Leave the voice channel:
 
 ## Blind test
 
-Not implemented yet.
+Start a game of blindtest:
+```
+    ?blindtest
+```
+
+Pick the theme and number of songs:
+```
+    ?pick [theme] [number]
+```
+
+Stop the game:
+```
+    ?stop
+```
+
+Skip the current song (by vote):
+```
+    ?skip
+```
