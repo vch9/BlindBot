@@ -32,6 +32,7 @@ async function playSong (game) {
 }
 
 async function nextSound (game) {
+    common.wait(4000);
     if (game.nb >= game.max) {
         const scores = getStrPlayers(game);
         const description = '\n\n' + scores;
