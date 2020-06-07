@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
+const levenshtein = require ('js-levenshtein');
 
 exports.error_msg = function (msg) {
     const not_impl = "NOT_IMPLEMENTED";
@@ -23,10 +24,14 @@ exports.playMusic = function (connection, volume, url, on_finish) {
     });
 }
 
-exports.wait = function (ms){
+exports.wait = function (ms) {
     var start = new Date().getTime();
     var end = start;
     while(end < start + ms) {
       end = new Date().getTime();
-   }
- }
+    }
+}
+
+exports.distance = function (s1, s2) {
+    return levenshtein(s1, s2);
+}
