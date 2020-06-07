@@ -32,6 +32,7 @@ async function playSong (game) {
 }
 
 async function nextSound (game) {
+    game.skip = 0;
     common.wait(4000);
     if (game.nb >= game.max) {
         const scores = getStrPlayers(game);
@@ -234,15 +235,15 @@ exports.skip = async function (msg) {
     let game = games.get(msg.guild.id);
     if (game && game.active && msg.channel === game.textChannel) {
         game.skip += 1;
-
-        if (game.skip >= (game.players.length/2)) {
+        const bound = Math.round(game.players.length/2);
+        if (game.skip >= bound) {
             if (game.conn && game.conn.dispatcher) {
                 game.nb += 1;
                 game.conn.dispatcher.end();
             }
             msg.channel.send('The song has been skipped!');
         } else {
-            msg.channel.send(`(${game.skip}/${game.players.length/2}) to skip!`);
+            msg.channel.send(`(${game.skip}/${bound}) to skip!`);
         }
     }
 }
