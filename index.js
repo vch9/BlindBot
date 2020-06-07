@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const CMD = require('./src/cmd.js');
 const client = new Discord.Client();
-const self = "BlindBot";
 
 const config = require('./config.json');
 const token = config.token;
@@ -12,9 +11,9 @@ if (!token) {
 }
 
 client.on('ready', () => {
-    console.log(`Logged in as ${self}`);
+    console.log(`Logged in`);
 });
 
-CMD.listen(self, client);
+CMD.listen(prefix, client);
 
 client.login(token);
