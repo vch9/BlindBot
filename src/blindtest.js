@@ -215,10 +215,11 @@ exports.answer = async function (msg) {
     if (game && game.active && msg.channel === game.textChannel) {
         const song = game.current_song;
         if (song) {
-            let answer = song[0].toUpperCase();
-            let player_answer = msg.content.toUpperCase();
+            let answer = song[0].toUpperCase().trim();
+            let player_answer = msg.content.toUpperCase().trim();
 
-            if (answer === player_answer) {
+            const dist = common.distance(answer, player_answer);
+            if (dist < 5) {
                 game.current_song = null;
                 game.nb += 1;
                 updateScores(game, msg.member);
